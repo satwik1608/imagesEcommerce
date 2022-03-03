@@ -3,6 +3,7 @@ const Products = require("./products");
 module.exports = {
   listProducts,
   getProduct,
+  createProduct,
 };
 
 async function listProducts(req, res) {
@@ -20,6 +21,12 @@ async function getProduct(req, res, next) {
 
   const product = await Products.get(id);
   if (!product) return next();
+
+  res.json(product);
+}
+
+async function createProduct(req, res, next) {
+  const product = await Products.create(req.body);
 
   res.json(product);
 }
