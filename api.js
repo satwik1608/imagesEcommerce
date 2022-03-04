@@ -1,4 +1,5 @@
 const Products = require("./products");
+const Orders = require("./orders");
 
 module.exports = {
   listProducts,
@@ -6,6 +7,8 @@ module.exports = {
   createProduct,
   editProduct,
   deleteProduct,
+  createOrder,
+  listOrders,
 };
 
 async function listProducts(req, res) {
@@ -42,4 +45,20 @@ async function editProduct(req, res, next) {
 async function deleteProduct(req, res, next) {
   await Products.remove(req.params.id);
   res.json({ success: true });
+}
+
+async function createOrder(req, res, next) {
+  const order = await Orders.create(req.body);
+  res.json(order);
+}
+
+async function listOrders(req, res, next) {
+  const { offset = 0, limit = 25, productId, status } = req.query;
+  const orders = await Orders.list({
+    offset: Number(offset),
+    limit: Number(limit),
+    productId,
+    status,
+  });
+  res.json(orders);
 }
